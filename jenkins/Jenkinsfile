@@ -4,14 +4,13 @@ pipeline {
         DOCKER_CREDS = credentials('dockerhub-creds')
         KUBECONFIG = credentials('minikube-kubeconfig')
     }
-    stages {
-        stage('Checkout') {
-            steps {
-                // Format yang benar dengan named parameters
-                git url: 'https://github.com/wienazka/casestudy5.git', branch: 'main'
-                 credentialsId: 'jenkins-casestudy-access'
-            }
-        }
+   stage('Checkout') {
+    steps {
+        git branch: 'main',
+            credentialsId: 'jenkins-casestudy-access',
+            url: 'https://github.com/wienazka/studikasus.git'
+    }
+}
         
         stage('Build Docker Image') {
             steps {
