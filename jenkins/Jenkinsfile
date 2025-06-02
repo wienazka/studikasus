@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/wienazka/casestudy5.git'
+                git 'https://github.com/wienazka/casestudy5.git', branch: 'main'
             }
         }
         
