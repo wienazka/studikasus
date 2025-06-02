@@ -8,7 +8,6 @@ pipeline {
         stage('Checkout') {
             steps {
                 git url: 'https://github.com/wienazka/casestudy5.git', branch: 'main'
-                 credentialsId: 'jenkins-casestudy-access'
             }
         }
         
