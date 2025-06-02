@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/wienazka/casestudy5.git'  # Ganti dengan repo Anda
+                git 'https://github.com/wienazka/casestudy5.git'
             }
         }
         
