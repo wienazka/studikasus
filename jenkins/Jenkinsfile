@@ -9,7 +9,7 @@ pipeline {
             steps {
                 // Format yang benar dengan named parameters
                 git url: 'https://github.com/wienazka/casestudy5.git', branch: 'main'
-                 credentialsId: 'github-creds'
+                 credentialsId: 'jenkins-casestudy-access'
             }
         }
         
