@@ -1,0 +1,54 @@
+pipeline {
+    agent any
+    environment {
+        DOCKER_CREDS = credentials('dockerhub-creds')
+        KUBECONFIG = credentials('minikube-kubeconfig')
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/wienazka/casestudy5.git'  # Ganti dengan repo Anda
+            }
+        }
+        
+        stage('Build Docker Image') {
+            steps {
+                dir('app') {
+                    sh 'docker build -t ${DOCKER_CREDS_USR}/flask-app:latest .'
+                }
+            }
+        }
+        
+        stage('Push to DockerHub') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                    sh 'docker push ${DOCKER_CREDS_USR}/flask-app:latest'
+                }
+            }
+        }
+        
+        stage('Deploy to Kubernetes') {
+            steps {
+                dir('helm-chart') {
+                    sh '''
+                        helm upgrade --install flask-app . \
+                        --set image.repository=${DOCKER_CREDS_USR}/flask-app \
+                        --kubeconfig $KUBECONFIG
+                    '''
+                }
+            }
+        }
+        
+        stage('Verify Deployment') {
+            steps {
+                sh 'kubectl --kubeconfig $KUBECONFIG get pods'
+                sh 'kubectl --kubeconfig $KUBECONFIG get svc'
+            }
+        }
+    }
+}

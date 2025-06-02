@@ -1,0 +1,10 @@
+replicaCount: 1
+
+image:
+  repository: wienazka/flask-app  # Ganti dengan repo Anda
+  tag: latest
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 5000
